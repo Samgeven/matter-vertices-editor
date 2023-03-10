@@ -1,0 +1,18 @@
+.intro-zone {
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.intro-zone__title {
+  color: #FFEAA1;
+}
+
+.drop-zone {
+  border-color: #FFEAA1 !important;
+  margin-top: auto;
+}
+
+.drop-zone path {
+  fill: #FFEAA1;
+}

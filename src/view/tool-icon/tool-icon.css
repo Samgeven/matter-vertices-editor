@@ -1,0 +1,14 @@
+.tool-icon {
+  max-width: 64px;
+  background-color: #32363D;
+  border-radius: 4px;
+  transition: 0.2s outline;
+  outline: 8px solid transparent;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.tool-icon--active {
+  outline: 1px solid #FFEAA1;
+  transition: 0.2s outline;
+}

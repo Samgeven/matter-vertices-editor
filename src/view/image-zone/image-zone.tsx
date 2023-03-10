@@ -1,7 +1,11 @@
-import { Stage, Layer, Image } from 'react-konva'
+import { Stage, Layer, Image, Line } from 'react-konva'
 import useImage from "use-image"
 import Konva from 'konva'
 import { useState } from 'react'
+import { useStore } from 'effector-react'
+import { $selectedTool } from '../../model/store'
+import { setLineCoords } from '../../model/events'
+import { DrawingSpace } from '../drawing-space/drawing-space'
 
 type ImageZoneProps = {
   imageSrc: string
@@ -14,7 +18,8 @@ type scaleOptions = {
 }
 
 export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
-  const [image] = useImage(imageSrc, 'anonymous', 'origin')
+  const selectedTool = useStore($selectedTool)
+  const [image] = useImage(imageSrc)
   const [pattern] = useImage('img-fill.svg')
   const [scale, setScale] = useState<scaleOptions>({
     stageScale: undefined,
@@ -54,24 +59,46 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
     })
   }
 
+  const touchHandler = (e: Konva.KonvaEventObject<MouseEvent>) => {
+    console.log(e)
+    const stage = e.target.getStage()
+
+    if (!stage) {
+      return
+    }
+
+    const [pointerX, pointerY] = [stage.getRelativePointerPosition()?.x, stage.getRelativePointerPosition()?.y]
+
+    console.log([pointerX, pointerY])
+    if (!pointerX || !pointerY) {
+      return
+    }
+
+    setLineCoords([pointerX, pointerY])
+  }
+
   return (
     <Stage 
       width={window.innerWidth} 
-      height={window.innerHeight}
+      height={window.innerHeight - 2}
       onWheel={(e) => wheelHandler(e)}
-      draggable
+      draggable={selectedTool === 'hand'}
       scaleX={scale.stageScale}
       scaleY={scale.stageScale}
       x={scale.stageX}
       y={scale.stageY}
     >
       <Layer>
-        <Image 
-          image={image} 
+        <Image
+          image={image}
           x={window.innerWidth / 2 - offsetX / 2}
           y={window.innerHeight / 2 - offsetY / 2}
           fillPatternImage={pattern}
+          onMouseDown={(e) => {touchHandler(e)}}
         />
+      </Layer>
+      <Layer>
+        <DrawingSpace/>
       </Layer>
     </Stage>
   )
