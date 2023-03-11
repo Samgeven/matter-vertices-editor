@@ -1,11 +1,11 @@
 import { useStore } from "effector-react"
-import { Circle } from "react-konva"
+import { Circle, Line } from "react-konva"
 import { $lineCoords } from "../../model/store"
 
 export const DrawingSpace = (): JSX.Element => {
   const lineCoords = useStore($lineCoords)
 
-  return <>{lineCoords.map((el, i) => {
+  const circles = lineCoords.map((el, i) => {
     return (
       <Circle
         key={i}
@@ -14,8 +14,27 @@ export const DrawingSpace = (): JSX.Element => {
         stroke="#000000"
         strokeWidth={2}
         radius={5}
-        fill='red'
+        fill='#FFEAA1'
       />
     )
-  })}</>
+  })
+
+  const lines = lineCoords.map((el, i) => {
+    if (!lineCoords[i + 1]) {
+      return false
+    }
+    return (
+      <Line
+        key={i}
+        points={[el[0], el[1], lineCoords[i + 1][0], lineCoords[i + 1][1]]}
+        stroke="#000000"
+        strokeWidth={2}
+      />
+    )
+  }).filter(Boolean)
+
+  return <>
+    {lines}
+    {circles}
+  </>
 }

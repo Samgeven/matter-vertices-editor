@@ -3,9 +3,9 @@ import useImage from "use-image"
 import Konva from 'konva'
 import { useState } from 'react'
 import { useStore } from 'effector-react'
-import { $selectedTool } from '../../model/store'
-import { setLineCoords } from '../../model/events'
+import { setLineCoords, setToolChain } from '../../model/events'
 import { DrawingSpace } from '../drawing-space/drawing-space'
+import { $toolChain } from '../../model/store'
 
 type ImageZoneProps = {
   imageSrc: string
@@ -18,7 +18,7 @@ type scaleOptions = {
 }
 
 export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
-  const selectedTool = useStore($selectedTool)
+  const selectedTool = useStore($toolChain)
   const [image] = useImage(imageSrc)
   const [pattern] = useImage('img-fill.svg')
   const [scale, setScale] = useState<scaleOptions>({
@@ -60,16 +60,18 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
   }
 
   const touchHandler = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    console.log(e)
     const stage = e.target.getStage()
 
     if (!stage) {
       return
     }
 
+    if (selectedTool[1] !== 'line') {
+      return
+    }
+
     const [pointerX, pointerY] = [stage.getRelativePointerPosition()?.x, stage.getRelativePointerPosition()?.y]
 
-    console.log([pointerX, pointerY])
     if (!pointerX || !pointerY) {
       return
     }
@@ -77,29 +79,53 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
     setLineCoords([pointerX, pointerY])
   }
 
+  const spaceDownHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== ' ' || selectedTool[1] === 'hand') {
+      return
+    }
+    
+    console.log('down', e.key)
+    setToolChain('hand')
+  }
+
+  const spaceUpHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== ' ') {
+      return
+    }
+
+    console.log('up', e.key)
+    setToolChain(selectedTool[0] ?? 'line')
+  }
+
   return (
-    <Stage 
-      width={window.innerWidth} 
-      height={window.innerHeight - 2}
-      onWheel={(e) => wheelHandler(e)}
-      draggable={selectedTool === 'hand'}
-      scaleX={scale.stageScale}
-      scaleY={scale.stageScale}
-      x={scale.stageX}
-      y={scale.stageY}
+    <div 
+      onKeyDown={(e) => spaceDownHandler(e)}
+      onKeyUp={(e) => spaceUpHandler(e)}
+      tabIndex={1}
     >
-      <Layer>
-        <Image
-          image={image}
-          x={window.innerWidth / 2 - offsetX / 2}
-          y={window.innerHeight / 2 - offsetY / 2}
-          fillPatternImage={pattern}
-          onMouseDown={(e) => {touchHandler(e)}}
-        />
-      </Layer>
-      <Layer>
-        <DrawingSpace/>
-      </Layer>
-    </Stage>
+      <Stage 
+        width={window.innerWidth} 
+        height={window.innerHeight - 2}
+        onWheel={(e) => wheelHandler(e)}
+        draggable={selectedTool[1] === 'hand'}
+        scaleX={scale.stageScale}
+        scaleY={scale.stageScale}
+        x={scale.stageX}
+        y={scale.stageY}
+      >
+        <Layer>
+          <Image
+            image={image}
+            x={window.innerWidth / 2 - offsetX / 2}
+            y={window.innerHeight / 2 - offsetY / 2}
+            fillPatternImage={pattern}
+            onMouseDown={(e) => {touchHandler(e)}}
+          />
+        </Layer>
+        <Layer>
+          <DrawingSpace/>
+        </Layer>
+      </Stage>
+    </div>
   )
 }

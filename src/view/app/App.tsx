@@ -3,7 +3,7 @@ import './App.css';
 import { ImageZone } from '../image-zone/image-zone';
 import { ToolPanel } from '../tool-panel/tool-panel';
 import { IntroZone } from '../intro-zone/intro-zone';
-import { $loadedFile } from '../../model/store';
+import { $loadedFile, $toolChain } from '../../model/store';
 import { useStore } from 'effector-react';
 
 function App() {
