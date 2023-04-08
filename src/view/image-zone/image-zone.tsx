@@ -1,20 +1,42 @@
-import { Stage, Layer, Image, Line } from 'react-konva'
+import { Stage, Layer, Image } from 'react-konva'
 import useImage from "use-image"
 import Konva from 'konva'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useStore } from 'effector-react'
-import { setLineCoords, setToolChain } from '../../model/events'
+import { setLineCoords, setToolChain, setZoom } from '../../model/events'
 import { DrawingSpace } from '../drawing-space/drawing-space'
 import { $toolChain } from '../../model/store'
 
 type ImageZoneProps = {
-  imageSrc: string
+  imageSrc: string,
 }
 
 type scaleOptions = {
   stageScale?: number,
   stageX?: number,
   stageY?: number
+}
+
+const lineLeftBtnHandler = (stage: Konva.Stage) => {
+  const [pointerX, pointerY] = [stage.getRelativePointerPosition()?.x, stage.getRelativePointerPosition()?.y]
+
+  if (!pointerX || !pointerY) {
+    return
+  }
+
+  setLineCoords([pointerX, pointerY])
+}
+
+const touchHandler = (e: Konva.KonvaEventObject<MouseEvent>, tool: string) => {
+  const stage = e.target.getStage()
+
+  if (!stage) {
+    return
+  }
+
+  if (tool === 'line') {
+    lineLeftBtnHandler(stage)
+  }
 }
 
 export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
@@ -30,14 +52,13 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
   const offsetX = image?.width ?? 300
   const offsetY = image?.height ?? 300
 
-  const wheelHandler = (e: Konva.KonvaEventObject<WheelEvent>) => {
+  const wheelHandler = (e: Konva.KonvaEventObject<WheelEvent>, step: number = 1.2) => {
     const stage = e.target.getStage()
 
     if (!stage) {
       return
     }
 
-    const step = 1.2
     const prevScale = stage.scaleX()
     const [pointerX, pointerY] = [stage.getPointerPosition()?.x, stage.getPointerPosition()?.y]
 
@@ -51,6 +72,7 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
     }
 
     const newScale = e.evt.deltaY > 0 ? prevScale / step : prevScale * step
+    setZoom(Math.ceil(newScale * 100))
 
     setScale({
       stageScale: newScale,
@@ -59,48 +81,34 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
     })
   }
 
-  const touchHandler = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    const stage = e.target.getStage()
-
-    if (!stage) {
-      return
-    }
-
-    if (selectedTool[1] !== 'line') {
-      return
-    }
-
-    const [pointerX, pointerY] = [stage.getRelativePointerPosition()?.x, stage.getRelativePointerPosition()?.y]
-
-    if (!pointerX || !pointerY) {
-      return
-    }
-
-    setLineCoords([pointerX, pointerY])
-  }
-
-  const spaceDownHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const spaceDownHandler = useCallback((e: KeyboardEvent) => {
     if (e.key !== ' ' || selectedTool[1] === 'hand') {
       return
     }
-    
-    console.log('down', e.key)
-    setToolChain('hand')
-  }
 
-  const spaceUpHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    console.log('event down')
+    setToolChain('hand')
+  }, [selectedTool])
+
+  const spaceUpHandler = useCallback((e: KeyboardEvent) => {
     if (e.key !== ' ') {
       return
     }
+    console.log('event up')
+    setToolChain('line')
+  }, [])
 
-    console.log('up', e.key)
-    setToolChain(selectedTool[0] ?? 'line')
-  }
+  useEffect(() => {
+    document.addEventListener('keydown', spaceDownHandler)
+    document.addEventListener('keyup', spaceUpHandler)
+    return () => {
+      document.removeEventListener('keydown', spaceDownHandler)
+      document.addEventListener('keyup', spaceUpHandler)
+    }
+  }, [spaceDownHandler, spaceUpHandler])
 
   return (
-    <div 
-      onKeyDown={(e) => spaceDownHandler(e)}
-      onKeyUp={(e) => spaceUpHandler(e)}
+    <div
       tabIndex={1}
     >
       <Stage 
@@ -113,13 +121,13 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
         x={scale.stageX}
         y={scale.stageY}
       >
-        <Layer>
+        <Layer id="image">
           <Image
             image={image}
             x={window.innerWidth / 2 - offsetX / 2}
             y={window.innerHeight / 2 - offsetY / 2}
             fillPatternImage={pattern}
-            onMouseDown={(e) => {touchHandler(e)}}
+            onMouseDown={(e) => {touchHandler(e, selectedTool[1])}}
           />
         </Layer>
         <Layer>

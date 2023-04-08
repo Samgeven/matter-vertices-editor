@@ -1,0 +1,22 @@
+.export-btn {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  background-color: #32363D;
+  padding: 20px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  border-radius: 5px;
+}
+
+.export-btn:hover {
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.export-icon {
+  width: 24px;
+  height: 24px;
+}
