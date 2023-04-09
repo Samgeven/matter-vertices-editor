@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material"
 import { CopyBlock, dracula } from "react-code-blocks"
+import './export-block.css'
 
 type ExportBlockProps = {
   exportCode: string | Array<any>

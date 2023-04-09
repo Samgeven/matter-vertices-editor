@@ -1,9 +1,6 @@
-.export-btn {
-  position: absolute;
-  left: 20px;
-  bottom: 20px;
+.utility-btn {
   background-color: #32363D;
-  padding: 20px;
+  padding: 8px;
   width: 24px;
   height: 24px;
   cursor: pointer;
@@ -11,12 +8,12 @@
   border-radius: 5px;
 }
 
-.export-btn:hover {
+.utility-btn:hover {
   opacity: 0.8;
   transition: opacity 0.2s;
 }
 
-.export-icon {
+.utility-icon {
   width: 24px;
   height: 24px;
 }

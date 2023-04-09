@@ -1,0 +1,16 @@
+.disclaimer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 24px;
+  color: #FFEAA1;
+  font-size: 20px;
+}
+
+.utility-panel {
+  position: absolute;
+  left: 24px;
+  bottom: 24px;
+  display: flex;
+  gap: 8px;
+}

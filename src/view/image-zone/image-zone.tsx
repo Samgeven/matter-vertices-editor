@@ -1,11 +1,12 @@
 import { Stage, Layer, Image } from 'react-konva'
 import useImage from "use-image"
 import Konva from 'konva'
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useStore } from 'effector-react'
-import { setLineCoords, setToolChain, setZoom } from '../../model/events'
+import { setLineCoords, setZoom } from '../../model/events'
 import { DrawingSpace } from '../drawing-space/drawing-space'
 import { $toolChain } from '../../model/store'
+import { useKeyShortcuts } from '../../utils/use-key-shortcuts'
 
 type ImageZoneProps = {
   imageSrc: string,
@@ -40,6 +41,7 @@ const touchHandler = (e: Konva.KonvaEventObject<MouseEvent>, tool: string) => {
 }
 
 export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
+  useKeyShortcuts()
   const selectedTool = useStore($toolChain)
   const [image] = useImage(imageSrc)
   const [pattern] = useImage('img-fill.svg')
@@ -80,32 +82,6 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
       stageY: -(pointerCoords.y - pointerY / newScale) * newScale
     })
   }
-
-  const spaceDownHandler = useCallback((e: KeyboardEvent) => {
-    if (e.key !== ' ' || selectedTool[1] === 'hand') {
-      return
-    }
-
-    console.log('event down')
-    setToolChain('hand')
-  }, [selectedTool])
-
-  const spaceUpHandler = useCallback((e: KeyboardEvent) => {
-    if (e.key !== ' ') {
-      return
-    }
-    console.log('event up')
-    setToolChain('line')
-  }, [])
-
-  useEffect(() => {
-    document.addEventListener('keydown', spaceDownHandler)
-    document.addEventListener('keyup', spaceUpHandler)
-    return () => {
-      document.removeEventListener('keydown', spaceDownHandler)
-      document.addEventListener('keyup', spaceUpHandler)
-    }
-  }, [spaceDownHandler, spaceUpHandler])
 
   return (
     <div

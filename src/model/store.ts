@@ -1,5 +1,6 @@
+import { guard, sample } from "effector"
 import { domain } from "./domain"
-import { fillAutoLine, setFileLoaded, setLineCoords, setToolChain, setZoom } from "./events"
+import { fillAutoLine, resetLineAction, setFileLoaded, setLineCoords, setToolChain, setZoom } from "./events"
 
 export const $toolChain = domain.createStore<[string | null, string]>([null, 'line'])
 export const $loadedFile = domain.createStore<string | null>(null)
@@ -15,3 +16,21 @@ $lineCoords.on(fillAutoLine, (_, payload) => payload)
 $toolChain.watch((state, payload) => {console.log('prevTool state', state, payload)})
 
 $zoomValue.on(setZoom, (_, payload) => payload)
+
+sample({
+  clock: resetLineAction,
+  source: $lineCoords,
+  fn: (store) => {
+    return store.slice(0, -1)
+  },
+  target: $lineCoords
+})
+
+guard({
+  clock: setFileLoaded,
+  filter: (_, clock) => {
+    return clock === null
+  },
+  source: [],
+  target: $lineCoords
+})
