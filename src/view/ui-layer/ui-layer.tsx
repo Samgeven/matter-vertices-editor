@@ -6,7 +6,8 @@ import { Modal, Snackbar } from '@mui/material';
 import { useState } from 'react';
 import { ExportBlock } from '../export-block/export-block';
 import './ui-layer.css'
-import { setFileLoaded } from '../../model/events';
+import { setFileLoaded, showEmulation } from '../../model/events';
+import { tupleToVector } from '../../utils/tuple-to-vector';
 
 export const UILayer = (): JSX.Element => {
   const vertices = useStore($lineCoords)
@@ -14,14 +15,7 @@ export const UILayer = (): JSX.Element => {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const zoomValue = useStore($zoomValue)
 
-  const createExportData = () => {
-    return vertices.map(el => {
-      return {
-        x: el[0],
-        y: el[1]
-      }
-    })
-  }
+  const exportData = tupleToVector(vertices)
 
   const exportBtnHandler = () => {
     if (vertices.length === 0) {
@@ -35,6 +29,10 @@ export const UILayer = (): JSX.Element => {
     setFileLoaded(null)
   }
 
+  const demoBtnHandler = () => {
+    showEmulation(true)
+  }
+
   return (
     <>
       <p className='disclaimer'>
@@ -46,9 +44,10 @@ export const UILayer = (): JSX.Element => {
       <div className='utility-panel'>
         <UtilityBtn onClick={exportBtnHandler} alias='export-icon' />
         <UtilityBtn onClick={backBtnHandler} alias='back' />
+        <UtilityBtn onClick={demoBtnHandler} alias='emulate' />
       </div>
       <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-        <ExportBlock exportCode={JSON.stringify(createExportData())} />
+        <ExportBlock exportCode={JSON.stringify(exportData)} />
       </Modal>
       <Snackbar
         open={snackbarOpen}

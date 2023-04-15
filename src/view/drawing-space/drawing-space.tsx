@@ -1,11 +1,13 @@
 import { useStore } from "effector-react"
 import { Circle, Line } from "react-konva"
 import { setLineCoords } from "../../model/events"
-import { $lineCoords } from "../../model/store"
+import { $lineCoords, $zoomValue } from "../../model/store"
 import Konva from 'konva'
 
 export const DrawingSpace = (): JSX.Element => {
   const lineCoords = useStore($lineCoords)
+  const zoomValue = useStore($zoomValue)
+
   const circleClickHandler = (e: Konva.KonvaEventObject<MouseEvent>) => {
     const [prevX, prevY] = lineCoords[lineCoords.length - 1]
 
@@ -24,7 +26,7 @@ export const DrawingSpace = (): JSX.Element => {
         y={el[1]}
         stroke="#000000"
         strokeWidth={2}
-        radius={5}
+        radius={100 / zoomValue * 2 + 2}
         fill='#FFEAA1'
         onClick={(e) => circleClickHandler(e)}
       />

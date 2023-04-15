@@ -2,8 +2,10 @@
   text-align: center;
   display: flex;
   justify-content: center;
+  width: 100vw;
   height: 100vh;
   background-color: #282C34;
+  overflow: hidden;
 }
 
 .App-logo {

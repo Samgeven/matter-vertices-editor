@@ -1,6 +1,10 @@
-import { Box, Typography } from "@mui/material"
+import { Alert, Box, Typography } from "@mui/material"
 import { CopyBlock, dracula } from "react-code-blocks"
 import './export-block.css'
+import { $lineCoords } from "../../model/store"
+import { useStore } from "effector-react"
+import { tupleToVector } from "../../utils/tuple-to-vector"
+import { Vertices } from "matter-js"
 
 type ExportBlockProps = {
   exportCode: string | Array<any>
@@ -20,11 +24,19 @@ const boxStyle = {
 }
 
 export const ExportBlock = ({ exportCode }: ExportBlockProps): JSX.Element => {
+  const vertices = useStore($lineCoords)
+  const isConcave = !Vertices.isConvex(tupleToVector(vertices))
+
   return (
     <Box sx={boxStyle}>
       <Typography id="modal-modal-title" variant="h5" component="h2">
         Export code
       </Typography>
+      {isConcave 
+      ? <Alert severity="warning">
+          Your shape supposedly has concave vertices. To ensure it works properly, see workaround
+        </Alert> 
+      : null}
       <CopyBlock
         text={exportCode}
         language="javascript"

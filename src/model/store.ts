@@ -1,21 +1,21 @@
 import { guard, sample } from "effector"
 import { domain } from "./domain"
-import { fillAutoLine, resetLineAction, setFileLoaded, setLineCoords, setToolChain, setZoom } from "./events"
+import { fillAutoLine, resetLineAction, setFileLoaded, setLineCoords, setToolChain, setZoom, showEmulation } from "./events"
 
 export const $toolChain = domain.createStore<[string | null, string]>([null, 'line'])
 export const $loadedFile = domain.createStore<string | null>(null)
 export const $lineCoords = domain.createStore<Array<[number, number]>>([])
 export const $zoomValue = domain.createStore<number>(100)
+export const $emulationZone = domain.createStore<boolean>(false)
 
 $toolChain.on(setToolChain, (state, payload) => [state[1], payload])
-
 $loadedFile.on(setFileLoaded, (_, payload) => payload)
+
 $lineCoords.on(setLineCoords, (state, payload) => [...state, payload])
 $lineCoords.on(fillAutoLine, (_, payload) => payload)
 
-$toolChain.watch((state, payload) => {console.log('prevTool state', state, payload)})
-
 $zoomValue.on(setZoom, (_, payload) => payload)
+$emulationZone.on(showEmulation, (_, payload) => payload)
 
 sample({
   clock: resetLineAction,
