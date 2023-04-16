@@ -8,17 +8,20 @@ import { ExportBlock } from '../export-block/export-block';
 import './ui-layer.css'
 import { setFileLoaded, showEmulation } from '../../model/events';
 import { tupleToVector } from '../../utils/tuple-to-vector';
+import { SNACKBAR_MESSAGE } from '../../data';
 
 export const UILayer = (): JSX.Element => {
   const vertices = useStore($lineCoords)
   const [modalOpen, setModalOpen] = useState(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
   const zoomValue = useStore($zoomValue)
 
   const exportData = tupleToVector(vertices)
 
   const exportBtnHandler = () => {
     if (vertices.length === 0) {
+      setSnackbarMessage(SNACKBAR_MESSAGE.EXPORT)
       setSnackbarOpen(true)
       return
     }
@@ -30,6 +33,11 @@ export const UILayer = (): JSX.Element => {
   }
 
   const demoBtnHandler = () => {
+    if (vertices.length < 3) {
+      setSnackbarMessage(SNACKBAR_MESSAGE.EMULATE)
+      setSnackbarOpen(true)
+      return
+    }
     showEmulation(true)
   }
 
@@ -53,7 +61,7 @@ export const UILayer = (): JSX.Element => {
         open={snackbarOpen}
         autoHideDuration={3000}
         onClose={() => setSnackbarOpen(false)}
-        message="Nothing to export yet"
+        message={snackbarMessage}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       />
       <div className='zoom-panel'>Zoom: {zoomValue}%</div>

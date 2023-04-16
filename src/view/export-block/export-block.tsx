@@ -35,7 +35,7 @@ export const ExportBlock = ({ exportCode }: ExportBlockProps): JSX.Element => {
       {isConcave 
       ? <Alert severity="warning">
           Your shape supposedly has concave vertices. To ensure it works properly, see workaround
-        </Alert> 
+        </Alert>
       : null}
       <CopyBlock
         text={exportCode}

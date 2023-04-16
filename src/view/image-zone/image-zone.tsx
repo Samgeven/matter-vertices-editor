@@ -1,12 +1,14 @@
 import { Stage, Layer, Image } from 'react-konva'
 import useImage from "use-image"
 import Konva from 'konva'
-import { useState } from 'react'
+import { createRef, useEffect, useRef, useState } from 'react'
 import { useStore } from 'effector-react'
 import { setLineCoords, setZoom } from '../../model/events'
 import { DrawingSpace } from '../drawing-space/drawing-space'
-import { $toolChain } from '../../model/store'
+import { $toolChain, $lineCoords } from '../../model/store'
 import { useKeyShortcuts } from '../../utils/use-key-shortcuts'
+import { Vertices } from 'matter-js'
+import { tupleToVector } from '../../utils/tuple-to-vector'
 
 type ImageZoneProps = {
   imageSrc: string,
@@ -42,8 +44,10 @@ const touchHandler = (e: Konva.KonvaEventObject<MouseEvent>, tool: string) => {
 
 export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
   useKeyShortcuts()
+  const vertices = useStore($lineCoords)
   const selectedTool = useStore($toolChain)
   const [image] = useImage(imageSrc)
+  const imageRef = createRef<Konva.Image>()
   const [pattern] = useImage('img-fill.svg')
   const [scale, setScale] = useState<scaleOptions>({
     stageScale: undefined,
@@ -83,6 +87,14 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
     })
   }
 
+  useEffect(() => {
+    if (!imageRef.current) {
+      return
+    }
+    console.log(imageRef.current?.x() + imageRef.current.width() / 2)
+    console.log(Vertices.centre(tupleToVector(vertices)))
+  })
+
   return (
     <div
       tabIndex={1}
@@ -99,6 +111,7 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
       >
         <Layer id="image">
           <Image
+            ref={imageRef}
             image={image}
             x={window.innerWidth / 2 - offsetX / 2}
             y={window.innerHeight / 2 - offsetY / 2}

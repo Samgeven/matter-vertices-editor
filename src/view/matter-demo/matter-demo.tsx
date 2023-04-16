@@ -1,9 +1,11 @@
 import { useEffect, useRef } from "react"
-import { Bodies, Engine, Render, Runner, Vertices, World } from 'matter-js'
+import { Bodies, Common, Engine, Render, Runner, Vertices, World } from 'matter-js'
 import { $loadedFile } from "../../model/store"
 import { useStore } from "effector-react"
 import { setUpConcaveBody } from "../../utils/set-up-concave-body"
 import { tupleToVector } from "../../utils/tuple-to-vector"
+import { UtilityBtn } from "../utility-btn/utility-btn"
+import { showEmulation } from "../../model/events"
 
 type MatterDemoProps = {
   vertices: [number, number][]
@@ -19,9 +21,12 @@ export const MatterDemo = ({ vertices }: MatterDemoProps) => {
   const scene = useRef() as React.LegacyRef<HTMLDivElement> | undefined
   const engine = useRef(Engine.create())
   const image = useStore($loadedFile)
+  
+  const cw = document.body.clientWidth
+  const ch = document.body.clientHeight
 
   const addBody = (e?: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const arr = tupleToVector(vertices)
+    let arr = tupleToVector(vertices)
 
     if (!image) {
       return
@@ -31,7 +36,11 @@ export const MatterDemo = ({ vertices }: MatterDemoProps) => {
     let bodyToRender
     
     if (Vertices.isConvex(arr)) {
-      verticesBody = Bodies.fromVertices(e?.pageX ?? 200, e?.pageY ?? 200, [arr], {
+      if (arr[0].x === arr[arr.length - 1].x && arr[0].y === arr[arr.length - 1].y) {
+        arr = arr.slice(0, -1)
+      }
+
+      verticesBody = Bodies.fromVertices(e?.pageX ?? cw / 2, e?.pageY ?? ch / 2, [arr], {
         render: {
           ...verticesBodyRenderOptions,
           sprite: {
@@ -44,7 +53,7 @@ export const MatterDemo = ({ vertices }: MatterDemoProps) => {
 
       bodyToRender = verticesBody
     } else {
-      verticesBody = Bodies.fromVertices(e?.pageX ?? 200, e?.pageY ?? 200, [arr], {
+      verticesBody = Bodies.fromVertices(e?.pageX ?? cw / 2, e?.pageY ?? ch / 2, [arr], {
         render: { ...verticesBodyRenderOptions }
       })
       bodyToRender = setUpConcaveBody(verticesBody, image)
@@ -55,8 +64,6 @@ export const MatterDemo = ({ vertices }: MatterDemoProps) => {
 
   useEffect(() => {
     // mount
-    const cw = document.body.clientWidth
-    const ch = document.body.clientHeight
 
     const sceneRef = scene as React.MutableRefObject<HTMLDivElement>
     
@@ -99,8 +106,11 @@ export const MatterDemo = ({ vertices }: MatterDemoProps) => {
   }, [])
   
   return (
-    <div onMouseDown={addBody}>
-      <div ref={scene} style={{ width: '100vw', height: '100vh' }} />
-    </div>
+    <>
+      <div ref={scene} style={{ width: '100vw', height: '100vh' }} onMouseDown={addBody} />
+      <div className='utility-panel'>
+        <UtilityBtn onClick={() => showEmulation(false)} alias='back' />
+      </div>
+    </>
   )
 }
