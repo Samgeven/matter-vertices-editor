@@ -1,14 +1,13 @@
-import { ToolPanel } from '../tool-panel/tool-panel';
-import { $lineCoords, $loadedFile, $zoomValue } from '../../model/store';
-import { useStore } from 'effector-react';
-import { UtilityBtn } from '../utility-btn/utility-btn';
-import { Modal, Snackbar } from '@mui/material';
-import { useState } from 'react';
-import { ExportBlock } from '../export-block/export-block';
+import { ToolPanel } from '../tool-panel/tool-panel'
+import { $lineCoords, $zoomValue } from '../../model/store'
+import { useStore } from 'effector-react'
+import { UtilityBtn } from '../utility-btn/utility-btn'
+import { Modal, Snackbar } from '@mui/material'
+import { useState } from 'react'
+import { ExportBlock } from '../export-block/export-block'
 import './ui-layer.css'
-import { setFileLoaded, showEmulation } from '../../model/events';
-import { tupleToVector } from '../../utils/tuple-to-vector';
-import { SNACKBAR_MESSAGE } from '../../data';
+import { setFileLoaded, showEmulation } from '../../model/events'
+import { SNACKBAR_MESSAGE } from '../../data'
 
 export const UILayer = (): JSX.Element => {
   const vertices = useStore($lineCoords)
@@ -16,8 +15,6 @@ export const UILayer = (): JSX.Element => {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const zoomValue = useStore($zoomValue)
-
-  const exportData = tupleToVector(vertices)
 
   const exportBtnHandler = () => {
     if (vertices.length === 0) {
@@ -55,7 +52,7 @@ export const UILayer = (): JSX.Element => {
         <UtilityBtn onClick={demoBtnHandler} alias='emulate' />
       </div>
       <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-        <ExportBlock exportCode={JSON.stringify(exportData)} />
+        <ExportBlock exportCode={JSON.stringify(vertices)} />
       </Modal>
       <Snackbar
         open={snackbarOpen}

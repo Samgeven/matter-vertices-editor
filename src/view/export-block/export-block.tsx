@@ -3,7 +3,6 @@ import { CopyBlock, dracula } from "react-code-blocks"
 import './export-block.css'
 import { $lineCoords } from "../../model/store"
 import { useStore } from "effector-react"
-import { tupleToVector } from "../../utils/tuple-to-vector"
 import { Vertices } from "matter-js"
 
 type ExportBlockProps = {
@@ -25,7 +24,7 @@ const boxStyle = {
 
 export const ExportBlock = ({ exportCode }: ExportBlockProps): JSX.Element => {
   const vertices = useStore($lineCoords)
-  const isConcave = !Vertices.isConvex(tupleToVector(vertices))
+  const isConcave = !Vertices.isConvex(vertices)
 
   return (
     <Box sx={boxStyle}>

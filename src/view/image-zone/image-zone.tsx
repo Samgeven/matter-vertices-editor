@@ -1,14 +1,13 @@
 import { Stage, Layer, Image } from 'react-konva'
 import useImage from "use-image"
 import Konva from 'konva'
-import { createRef, useEffect, useRef, useState } from 'react'
+import { createRef, useEffect, useState } from 'react'
 import { useStore } from 'effector-react'
-import { setLineCoords, setZoom } from '../../model/events'
+import { setImageCenter, setLineCoords, setZoom } from '../../model/events'
 import { DrawingSpace } from '../drawing-space/drawing-space'
 import { $toolChain, $lineCoords } from '../../model/store'
 import { useKeyShortcuts } from '../../utils/use-key-shortcuts'
 import { Vertices } from 'matter-js'
-import { tupleToVector } from '../../utils/tuple-to-vector'
 
 type ImageZoneProps = {
   imageSrc: string,
@@ -27,7 +26,7 @@ const lineLeftBtnHandler = (stage: Konva.Stage) => {
     return
   }
 
-  setLineCoords([pointerX, pointerY])
+  setLineCoords({x: pointerX, y: pointerY})
 }
 
 const touchHandler = (e: Konva.KonvaEventObject<MouseEvent>, tool: string) => {
@@ -88,12 +87,16 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
   }
 
   useEffect(() => {
-    if (!imageRef.current) {
+    if (!imageRef.current || !imageRef.current.width) {
       return
     }
-    console.log(imageRef.current?.x() + imageRef.current.width() / 2)
-    console.log(Vertices.centre(tupleToVector(vertices)))
-  })
+    console.log(imageRef.current?.x(), imageRef.current?.width())
+    // console.log(Vertices.centre(vertices))
+    setImageCenter({
+      x: imageRef.current?.x() + imageRef.current.width() / 2,
+      y: imageRef.current?.y() + imageRef.current.height() / 2
+    })
+  }, [])
 
   return (
     <div
@@ -116,6 +119,7 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
             x={window.innerWidth / 2 - offsetX / 2}
             y={window.innerHeight / 2 - offsetY / 2}
             fillPatternImage={pattern}
+            imageSmoothingEnabled={false}
             onMouseDown={(e) => {touchHandler(e, selectedTool[1])}}
           />
         </Layer>

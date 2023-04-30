@@ -9,24 +9,24 @@ export const DrawingSpace = (): JSX.Element => {
   const zoomValue = useStore($zoomValue)
 
   const circleClickHandler = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    const [prevX, prevY] = lineCoords[lineCoords.length - 1]
+    const {x, y} = lineCoords[lineCoords.length - 1]
 
-    if (prevX === e.target.attrs.x && prevY === e.target.attrs.y) {
+    if (x === e.target.attrs.x && y === e.target.attrs.y) {
       return
     }
 
-    setLineCoords([e.target.attrs.x, e.target.attrs.y])
+    setLineCoords({x: e.target.attrs.x, y: e.target.attrs.y})
   }
 
   const circles = lineCoords.map((el, i) => {
     return (
       <Circle
         key={i}
-        x={el[0]}
-        y={el[1]}
+        x={el.x}
+        y={el.y}
         stroke="#000000"
-        strokeWidth={2}
-        radius={100 / zoomValue * 2 + 2}
+        strokeWidth={2 / (zoomValue / 100) + 0.5}
+        radius={ 4 / (zoomValue / 100) + 2}
         fill='#FFEAA1'
         onClick={(e) => circleClickHandler(e)}
       />
@@ -40,9 +40,9 @@ export const DrawingSpace = (): JSX.Element => {
     return (
       <Line
         key={i}
-        points={[el[0], el[1], lineCoords[i + 1][0], lineCoords[i + 1][1]]}
+        points={[el.x, el.y, lineCoords[i + 1].x, lineCoords[i + 1].y]}
         stroke="#000000"
-        strokeWidth={2}
+        strokeWidth={2 / (zoomValue / 100) + 0.5}
       />
     )
   }).filter(Boolean)

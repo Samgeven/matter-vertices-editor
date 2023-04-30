@@ -1,7 +1,12 @@
 import Matter, { Bodies, Common, Composite, Constraint } from "matter-js";
 
+let vertices: Matter.Vector[]
 export const setUpConcaveBody = (concaveBody: Matter.Body, texture: string): Matter.Composite => {
   Common.setDecomp(require('poly-decomp'))
+
+  if (!vertices) {
+    vertices = concaveBody.vertices
+  }
 
   const spriteBody = Bodies.rectangle(
     concaveBody.bounds.min.x,
@@ -17,6 +22,7 @@ export const setUpConcaveBody = (concaveBody: Matter.Body, texture: string): Mat
         yScale: 1,
       },
     },
+    label: 'texture',
     collisionFilter: {
       mask: 0,
     },
@@ -46,6 +52,18 @@ export const setUpConcaveBody = (concaveBody: Matter.Body, texture: string): Mat
     length: 0,
     stiffness: 1.1
   })
+
+  // var concaveBounds = Matter.Bounds.create(concaveBody.vertices);
+  // var textureBounds = Matter.Bounds.create(spriteBody.vertices);
+
+  // var offsetX = (concaveBody.bounds.min.x - spriteBody.bounds.min.x) / 1000
+  // var offsetY = (concaveBody.bounds.min.y - spriteBody.bounds.min.y) / 1000
+  // console.log(offsetX, offsetY)
+  
+  // if (spriteBody.render.sprite) {
+  //   spriteBody.render.sprite.xOffset = offsetX / 1000 + 0.5;
+  //   spriteBody.render.sprite.yOffset = offsetY / 1000 + 0.5;
+  // }
 
   const composite = Composite.create()
   Composite.add(composite, [concaveBody, spriteBody, constraint, constraint2, constraint3])
