@@ -1,13 +1,12 @@
 import { Stage, Layer, Image } from 'react-konva'
 import useImage from "use-image"
 import Konva from 'konva'
-import { createRef, useEffect, useState } from 'react'
+import { createRef, useState } from 'react'
 import { useStore } from 'effector-react'
-import { setImageCenter, setLineCoords, setZoom } from '../../model/events'
+import { setLineCoords, setZoom } from '../../model/events'
 import { DrawingSpace } from '../drawing-space/drawing-space'
-import { $toolChain, $lineCoords } from '../../model/store'
+import { $toolChain } from '../../model/store'
 import { useKeyShortcuts } from '../../utils/use-key-shortcuts'
-import { Vertices } from 'matter-js'
 
 type ImageZoneProps = {
   imageSrc: string,
@@ -43,7 +42,6 @@ const touchHandler = (e: Konva.KonvaEventObject<MouseEvent>, tool: string) => {
 
 export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
   useKeyShortcuts()
-  const vertices = useStore($lineCoords)
   const selectedTool = useStore($toolChain)
   const [image] = useImage(imageSrc)
   const imageRef = createRef<Konva.Image>()
@@ -85,18 +83,6 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
       stageY: -(pointerCoords.y - pointerY / newScale) * newScale
     })
   }
-
-  useEffect(() => {
-    if (!imageRef.current || !imageRef.current.width) {
-      return
-    }
-    console.log(imageRef.current?.x(), imageRef.current?.width())
-    // console.log(Vertices.centre(vertices))
-    setImageCenter({
-      x: imageRef.current?.x() + imageRef.current.width() / 2,
-      y: imageRef.current?.y() + imageRef.current.height() / 2
-    })
-  }, [])
 
   return (
     <div

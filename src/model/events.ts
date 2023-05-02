@@ -1,4 +1,5 @@
 import { domain } from "./domain"
+import { ShapeSettings } from "./store"
 
 export const setFileLoaded = domain.createEvent<string | null>('file is loaded/unloaded')
 
@@ -10,6 +11,4 @@ export const fillAutoLine = domain.createEvent<Array<{x: number, y: number}>>('s
 
 export const setZoom = domain.createEvent<number>('setting zoom value')
 export const showEmulation = domain.createEvent<boolean>('showing the emulation')
-
-export const setImageCenter = domain.createEvent<{x: number, y: number}>('setting image center')
-export const setBodyOrigin = domain.createEvent<{x: number, y: number}>('setting matter body origin')
+export const setShapeSettings = domain.createEvent<Partial<ShapeSettings>>('setting shape settings')

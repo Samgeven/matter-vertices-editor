@@ -1,7 +1,11 @@
 import { Button, Slider, Typography } from "@mui/material";
 import { Composite, World } from "matter-js";
+import { setShapeSettings } from "../../model/events";
+import { useState } from "react";
+import { $shapeSettings } from "../../model/store";
+import { useStore } from "effector-react";
 
-type ControlConfig = {
+export type ControlConfig = {
   label: 'xScale' | 'yScale' | 'xOffset' | 'yOffset',
   min: number,
   max: number,
@@ -48,6 +52,9 @@ const controlChangeHandler = (e: Event, world: World, controlProp: ControlConfig
     }
     body.render.sprite[controlProp] = target?.value
   }
+  setShapeSettings({
+    [controlProp]: target?.value
+  })
 }
 
 const clearButtonHandler = (world: World) => {
@@ -60,6 +67,8 @@ type ShapeControlsProps = {
 }
 
 export const ShapeControls = ({ world, isShapeConvex = true }: ShapeControlsProps): JSX.Element => {
+  const [shapeSettings, setShapeSettings] = useState(useStore($shapeSettings))
+
   return (
     <div className="controls">
       {
@@ -82,7 +91,8 @@ export const ShapeControls = ({ world, isShapeConvex = true }: ShapeControlsProp
       }
       <Button 
         variant="contained" 
-        style={{marginTop: '54px', fontSize: '12px'}}
+        style={{marginTop: '54px'}}
+        size='small'
         onClick={() => clearButtonHandler(world)}
       >
         Clear bodies

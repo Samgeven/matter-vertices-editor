@@ -1,5 +1,5 @@
 import { ToolPanel } from '../tool-panel/tool-panel'
-import { $lineCoords, $zoomValue } from '../../model/store'
+import { $lineCoords, $shapeSettings, $zoomValue } from '../../model/store'
 import { useStore } from 'effector-react'
 import { UtilityBtn } from '../utility-btn/utility-btn'
 import { Modal, Snackbar } from '@mui/material'
@@ -8,9 +8,11 @@ import { ExportBlock } from '../export-block/export-block'
 import './ui-layer.css'
 import { setFileLoaded, showEmulation } from '../../model/events'
 import { SNACKBAR_MESSAGE } from '../../data'
+import { createExportCode } from '../../utils/create-export-code'
 
 export const UILayer = (): JSX.Element => {
   const vertices = useStore($lineCoords)
+  const shapeSettings = useStore($shapeSettings)
   const [modalOpen, setModalOpen] = useState(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
@@ -38,6 +40,10 @@ export const UILayer = (): JSX.Element => {
     showEmulation(true)
   }
 
+  const fixedVertices = vertices.map(el => { 
+    return {x: el.x.toFixed(4), y: el.x.toFixed(4)}
+  })
+
   return (
     <>
       <p className='disclaimer'>
@@ -52,7 +58,7 @@ export const UILayer = (): JSX.Element => {
         <UtilityBtn onClick={demoBtnHandler} alias='emulate' />
       </div>
       <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-        <ExportBlock exportCode={JSON.stringify(vertices)} />
+        <ExportBlock exportCode={createExportCode(vertices, shapeSettings)} />
       </Modal>
       <Snackbar
         open={snackbarOpen}

@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from "react"
-import { Bodies, Body, Common, Composite, Engine, Render, Runner, Vertices, World } from 'matter-js'
+import { useEffect, useRef } from "react"
+import { Bodies, Engine, Render, Runner, Vertices, World } from 'matter-js'
 import { $loadedFile } from "../../model/store"
 import { useStore } from "effector-react"
 import { setUpConcaveBody } from "../../utils/set-up-concave-body"
 import { UtilityBtn } from "../utility-btn/utility-btn"
 import { showEmulation } from "../../model/events"
-import { Slider, Typography } from "@mui/material"
 import './index.css'
 import { ShapeControls } from "../shape-controls/shape-controls"
 
@@ -20,7 +19,6 @@ const verticesBodyRenderOptions = {
 }
 
 export const MatterDemo = ({ vertices }: MatterDemoProps) => {
-  console.log(vertices)
   const scene = useRef() as React.LegacyRef<HTMLDivElement> | undefined
   const engine = useRef(Engine.create())
   const image = useStore($loadedFile)

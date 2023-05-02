@@ -14,7 +14,7 @@ const boxStyle = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 500,
+  width: 600,
   bgcolor: '#282C34',
   border: '2px solid #FFEAA1',
   boxShadow: 24,
@@ -28,15 +28,16 @@ export const ExportBlock = ({ exportCode }: ExportBlockProps): JSX.Element => {
 
   return (
     <Box sx={boxStyle}>
-      <Typography id="modal-modal-title" variant="h5" component="h2">
+      <Typography id="modal-modal-title" variant="h5" component="h2" marginBottom='12px'>
         Export code
       </Typography>
       {isConcave 
-      ? <Alert severity="warning">
-          Your shape supposedly has concave vertices. To ensure it works properly, see workaround
+      ? <Alert severity="warning" style={{ margin: '12px 0' }}>
+          Your shape supposedly has concave vertices. Check out the emulation page to create additional shape settings.
         </Alert>
       : null}
       <CopyBlock
+        style={{ padding: '16px !important' }}
         text={exportCode}
         language="javascript"
         theme={dracula}
