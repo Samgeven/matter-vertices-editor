@@ -1,0 +1,1 @@
+export type EditingTools = 'line' | 'hand'

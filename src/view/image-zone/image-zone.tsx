@@ -105,6 +105,8 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
             x={window.innerWidth / 2 - offsetX / 2}
             y={window.innerHeight / 2 - offsetY / 2}
             fillPatternImage={pattern}
+            fillPatternScaleX={1 / (scale.stageScale ?? 1)}
+            fillPatternScaleY={1 / (scale.stageScale ?? 1)}
             imageSmoothingEnabled={false}
             onMouseDown={(e) => {touchHandler(e, selectedTool[1])}}
           />

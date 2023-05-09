@@ -1,4 +1,4 @@
-import Matter, { Vector } from "matter-js"
+import { Vector, Vertices } from "matter-js"
 import { DEFAULT_SHAPE_SETTINGS, ShapeSettings } from "../model/store"
 import prettier from 'prettier';
 import parserBabel from "prettier/parser-babel";
@@ -6,8 +6,8 @@ import parserBabel from "prettier/parser-babel";
 const fixedVertices = (vertices: Vector[]) => {
   return vertices.map(el => {
     return {
-      x: el.x.toFixed(4),
-      y: el.x.toFixed(4)
+      x: Number(el.x.toFixed(4)),
+      y: Number(el.x.toFixed(4))
     }
   })
 }
@@ -15,7 +15,7 @@ const fixedVertices = (vertices: Vector[]) => {
 const PRETTIER_CONFIG: prettier.Options = {
   parser: 'babel', 
   plugins: [parserBabel],
-  embeddedLanguageFormatting: "off"
+  embeddedLanguageFormatting: "off",
 }
 
 const excludeDefaultShapeSettings = (shapeSettings: ShapeSettings): Partial<ShapeSettings> => {
@@ -36,7 +36,7 @@ export const createExportCode = (vertices: Vector[], shapeSettings: ShapeSetting
   const settingsToDisplay = excludeDefaultShapeSettings(shapeSettings)
 
   const shapeSettingsString = 
-    Object.keys(settingsToDisplay).length !== 0 
+    Object.keys(settingsToDisplay).length !== 0 && !Vertices.isConvex(vertices)
     ? prettier.format(`const shapeSettings = ${JSON.stringify(settingsToDisplay)}`, PRETTIER_CONFIG)
     : ''
 

@@ -1,8 +1,8 @@
 import Matter, { Bodies, Common, Composite, Constraint } from "matter-js";
+import { ShapeSettings } from "../model/store";
 
 let vertices: Matter.Vector[]
-export const setUpConcaveBody = (concaveBody: Matter.Body, texture: string): Matter.Composite => {
-  Common.setDecomp(require('poly-decomp'))
+export const setUpConcaveBody = (concaveBody: Matter.Body, texture: string, shapeSettings: ShapeSettings): Matter.Composite => {
 
   if (!vertices) {
     vertices = concaveBody.vertices
@@ -27,6 +27,11 @@ export const setUpConcaveBody = (concaveBody: Matter.Body, texture: string): Mat
       mask: 0,
     },
   })
+
+  if (spriteBody.render.sprite) {
+    spriteBody.render.sprite.xOffset = shapeSettings.xOffset
+    spriteBody.render.sprite.yOffset = shapeSettings.yOffset
+  }
 
   let constraint = Constraint.create({
     bodyA: concaveBody,

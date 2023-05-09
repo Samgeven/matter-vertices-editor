@@ -1,11 +1,15 @@
 .tool-icon {
-  max-width: 64px;
+  width: 56px;
+  height: 56px;
   background-color: #32363D;
   border-radius: 4px;
   transition: 0.2s outline;
   outline: 8px solid transparent;
   margin-bottom: 16px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .tool-icon--active {

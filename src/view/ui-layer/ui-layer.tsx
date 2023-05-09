@@ -1,5 +1,5 @@
 import { ToolPanel } from '../tool-panel/tool-panel'
-import { $lineCoords, $shapeSettings, $zoomValue } from '../../model/store'
+import { $lineCoords, $loadedFile, $shapeSettings, $zoomValue } from '../../model/store'
 import { useStore } from 'effector-react'
 import { UtilityBtn } from '../utility-btn/utility-btn'
 import { Modal, Snackbar } from '@mui/material'
@@ -9,6 +9,8 @@ import './ui-layer.css'
 import { setFileLoaded, showEmulation } from '../../model/events'
 import { SNACKBAR_MESSAGE } from '../../data'
 import { createExportCode } from '../../utils/create-export-code'
+import { ImageInfoPanel } from '../image-info-panel/image-info-panel'
+import useImage from 'use-image'
 
 export const UILayer = (): JSX.Element => {
   const vertices = useStore($lineCoords)
@@ -17,6 +19,8 @@ export const UILayer = (): JSX.Element => {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const zoomValue = useStore($zoomValue)
+  const file = useStore($loadedFile)
+  const [image] = useImage(file ?? '')
 
   const exportBtnHandler = () => {
     if (vertices.length === 0) {
@@ -39,10 +43,6 @@ export const UILayer = (): JSX.Element => {
     }
     showEmulation(true)
   }
-
-  const fixedVertices = vertices.map(el => { 
-    return {x: el.x.toFixed(4), y: el.x.toFixed(4)}
-  })
 
   return (
     <>
@@ -67,7 +67,7 @@ export const UILayer = (): JSX.Element => {
         message={snackbarMessage}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       />
-      <div className='zoom-panel'>Zoom: {zoomValue}%</div>
+      <ImageInfoPanel zoom={zoomValue} imageSize={`${image?.width} x ${image?.height} px`} />
     </>
   )
 }

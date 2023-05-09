@@ -1,9 +1,6 @@
 import { Button, Slider, Typography } from "@mui/material";
 import { Composite, World } from "matter-js";
 import { setShapeSettings } from "../../model/events";
-import { useState } from "react";
-import { $shapeSettings } from "../../model/store";
-import { useStore } from "effector-react";
 
 export type ControlConfig = {
   label: 'xScale' | 'yScale' | 'xOffset' | 'yOffset',
@@ -67,7 +64,6 @@ type ShapeControlsProps = {
 }
 
 export const ShapeControls = ({ world, isShapeConvex = true }: ShapeControlsProps): JSX.Element => {
-  const [shapeSettings, setShapeSettings] = useState(useStore($shapeSettings))
 
   return (
     <div className="controls">
@@ -85,6 +81,7 @@ export const ShapeControls = ({ world, isShapeConvex = true }: ShapeControlsProp
               size='small'
               disabled={isShapeConvex}
               onChange={(e) => controlChangeHandler(e, world, el.label)}
+              key={el.label}
             />
           </>
         ))

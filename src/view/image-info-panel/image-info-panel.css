@@ -1,0 +1,31 @@
+.image-info-panel {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  color: #FFEAA1;
+  background-color: #32363D;
+  /* padding: 12px; */
+  border-radius: 12px;
+  display: flex;
+  padding: 4px 0;
+}
+
+.image-size {
+  position: relative;
+  border-right: 2px solid #282C34;
+  padding: 0 12px;
+}
+
+.zoom {
+  padding: 0 12px;
+}
+
+/* .image-size:after {
+  content: '';
+  position: absolute;
+  right: -8px;
+  top: 0;
+  width: 2px;
+  height: 40px;
+  background-color: #282C34;
+} */

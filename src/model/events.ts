@@ -1,9 +1,10 @@
+import { EditingTools } from "../types"
 import { domain } from "./domain"
 import { ShapeSettings } from "./store"
 
 export const setFileLoaded = domain.createEvent<string | null>('file is loaded/unloaded')
 
-export const setToolChain = domain.createEvent<string>('selecting tool')
+export const setToolChain = domain.createEvent<EditingTools>('selecting tool')
 export const setPrevTool = domain.createEvent<string>('setting previous tool')
 export const resetLineAction = domain.createEvent('resetting last line action')
 export const setLineCoords = domain.createEvent<{x: number, y: number}>('setting line coords')
