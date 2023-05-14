@@ -1,12 +1,13 @@
 import { Stage, Layer, Image } from 'react-konva'
 import useImage from "use-image"
 import Konva from 'konva'
-import { createRef, useState } from 'react'
+import { createRef, useEffect, useState } from 'react'
 import { useStore } from 'effector-react'
-import { setLineCoords, setZoom } from '../../model/events'
+import { fillAutoLine, setLineCoords, setZoom } from '../../model/events'
 import { DrawingSpace } from '../drawing-space/drawing-space'
 import { $toolChain } from '../../model/store'
 import { useKeyShortcuts } from '../../utils/use-key-shortcuts'
+import { createPolygonFromImage } from '../../utils/polygon-from-image'
 
 type ImageZoneProps = {
   imageSrc: string,
@@ -45,6 +46,7 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
   const selectedTool = useStore($toolChain)
   const [image] = useImage(imageSrc)
   const imageRef = createRef<Konva.Image>()
+  const layerRef = createRef<Konva.Layer>()
   const [pattern] = useImage('img-fill.svg')
   const [scale, setScale] = useState<scaleOptions>({
     stageScale: undefined,
@@ -84,6 +86,17 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
     })
   }
 
+  useEffect(() => {
+    if (!image) {
+      return
+    }
+
+    const canvas = layerRef?.current?.canvas._canvas as HTMLCanvasElement
+    const points = createPolygonFromImage(image)
+    console.log(points)
+    fillAutoLine(points)
+  }, [image])
+
   return (
     <div
       tabIndex={1}
@@ -98,7 +111,7 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
         x={scale.stageX}
         y={scale.stageY}
       >
-        <Layer id="image">
+        <Layer ref={layerRef}>
           <Image
             ref={imageRef}
             image={image}

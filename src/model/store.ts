@@ -56,4 +56,13 @@ guard({
   target: $lineCoords
 })
 
+// guard({
+//   clock: setToolChain,
+//   filter: (_, clock) => {
+//     return clock === 'auto-line'
+//   },
+//   source: [],
+//   target: $lineCoords
+// })
+
 $shapeSettings.watch(store => console.log(store))

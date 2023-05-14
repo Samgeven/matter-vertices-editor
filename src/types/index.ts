@@ -1,1 +1,1 @@
-export type EditingTools = 'line' | 'hand'
+export type EditingTools = 'line' | 'hand' | 'auto-line'
