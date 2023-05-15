@@ -1,6 +1,8 @@
 import { guard, sample } from "effector"
 import { domain } from "./domain"
 import { fillAutoLine, resetLineAction, setFileLoaded, setLineCoords, setShapeSettings, setToolChain, setZoom, showEmulation } from "./events"
+import { createPolygonFromImage, removeCloseAndCollinear } from "../utils/polygon-from-image"
+import { Vector } from "matter-js"
 
 export type ShapeSettings = {
   xScale: number,
@@ -18,7 +20,7 @@ export const DEFAULT_SHAPE_SETTINGS: ShapeSettings = {
 
 export const $toolChain = domain.createStore<[string | null, string]>([null, 'line'])
 export const $loadedFile = domain.createStore<string | null>(null)
-export const $lineCoords = domain.createStore<Array<{x: number, y: number}>>([])
+export const $lineCoords = domain.createStore<Array<Vector>>([])
 export const $zoomValue = domain.createStore<number>(100)
 export const $emulationZone = domain.createStore<boolean>(false)
 export const $shapeSettings = domain.createStore<ShapeSettings>(DEFAULT_SHAPE_SETTINGS)
@@ -36,6 +38,26 @@ $shapeSettings.on(setShapeSettings, (state, payload) => {
     ...state,
     ...payload
   }
+})
+
+const $polygonFromImage = $loadedFile.map((state) => {
+  if (!state) {
+    return []
+  }
+
+  const image = document.createElement('img')
+  console.log(image.width)
+  image.src = state
+  return createPolygonFromImage(image)
+})
+
+sample({
+  clock: resetLineAction,
+  source: $lineCoords,
+  fn: (store) => {
+    return store.slice(0, -1)
+  },
+  target: $lineCoords
 })
 
 sample({
@@ -56,13 +78,16 @@ guard({
   target: $lineCoords
 })
 
-// guard({
-//   clock: setToolChain,
-//   filter: (_, clock) => {
-//     return clock === 'auto-line'
-//   },
-//   source: [],
-//   target: $lineCoords
-// })
+sample({
+  clock: setToolChain,
+  filter: (_, clock) => {
+    return clock === 'auto-line'
+  },
+  source: $polygonFromImage,
+  fn: (state) => {
+    return removeCloseAndCollinear(state)
+  },
+  target: fillAutoLine
+})
 
 $shapeSettings.watch(store => console.log(store))

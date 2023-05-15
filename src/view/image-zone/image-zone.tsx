@@ -92,9 +92,9 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
     }
 
     const canvas = layerRef?.current?.canvas._canvas as HTMLCanvasElement
-    const points = createPolygonFromImage(image)
-    console.log(points)
-    fillAutoLine(points)
+    // const points = createPolygonFromImage(image)
+    // console.log(points)
+    // fillAutoLine(points)
   }, [image])
 
   return (

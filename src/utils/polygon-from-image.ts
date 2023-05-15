@@ -1,31 +1,20 @@
 import { Vector, Vertices } from "matter-js"
 import simplify from "simplify-js"
-import * as polyk  from 'polyk';
 
-function filterVertices(vertices: Vector[], threshold: number) {
-  const result = [];
-  
-  // Check if the first and last vertices are the same
-  const dist = Math.sqrt((vertices[0].x - vertices[vertices.length - 1].x) ** 2 + (vertices[0].y - vertices[vertices.length - 1].y) ** 2);
-  if (dist < threshold) {
-    vertices.pop();
-  }
-  
-  // Iterate through the vertices and filter out non-critical points
-  for (let i = 0; i < vertices.length - 1; i++) {
-    const dist = Math.sqrt((vertices[i].x - vertices[i + 1].x) ** 2 + (vertices[i].y - vertices[i + 1].y) ** 2);
-    if (dist > threshold) {
-      result.push(vertices[i + 1]);
+function removeClosePoints(points: Vector[], minDistance: number) {
+  for (let i = 0; i < points.length; i++) {
+    for (let j = i + 1; j < points.length; j++) {
+      const distance = Math.sqrt((points[i].x - points[j].x) ** 2 + (points[i].y - points[j].y) ** 2);
+      if (distance < minDistance) {
+        points.splice(j, 1);
+        j--;
+      }
     }
   }
-  
-  // Add the last vertex to the result array
-  result.push(vertices[vertices.length - 1]);
-  
-  return result;
+  return points;
 }
 
-export const createPolygonFromImage = (image: HTMLImageElement) => {
+export const createPolygonFromImage = (image: HTMLImageElement): Vector[] => {
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
   console.log(canvas)
@@ -48,10 +37,7 @@ export const createPolygonFromImage = (image: HTMLImageElement) => {
       const index = (y * width + x) * 4;
       const alpha = pixels[index + 3];
       
-      if (alpha === 255) {
-        // Add this pixel as a point
-        // points.push({ x, y });
-        
+      if (alpha > 0) {    
         // Check neighboring pixels and add line segments between them
         const neighbors = [
           { x: x - 1, y },
@@ -64,34 +50,42 @@ export const createPolygonFromImage = (image: HTMLImageElement) => {
           const neighborIndex = (neighbor.y * width + neighbor.x) * 4;
           const neighborAlpha = pixels[neighborIndex + 3];
           
-          if (neighborAlpha === 255) {
+          if (neighborAlpha === 0) {
             // Add a line segment between these two points
-            points.push({ x: neighbor.x, y: neighbor.y });
+            points.push({ x, y });
+          }
+
+          if (neighbor.x === width -1 || neighbor.y === height - 1) {
+            points.push({ x, y });
           }
         });
       }
     }
   }
+
+  return points.map(el => {
+    return {
+      x: el.x += offsetX,
+      y: el.y += offsetY,
+    }
+  })
   
   // Simplify the set of line segments into a polygon
-  const tolerance = 30;
-  const polygon = simplify(points, tolerance, true);
-  console.log(Object.keys(polyk));
-  // removeCollinearPoints
-  const clockwise = 
-  Vertices.clockwiseSort(polygon)
-    // .filter((el, i, arr) => {
-    //   if (!arr[i - 1] || !arr[i + 1]) {
-    //     return true
-    //   }
-    //   return !(getDistance(el, arr[i + 1]) < 5 || getDistance(el, arr[i - 1]) < 5)
-    // })
-    .map(el => {
-      return {
-        x: el.x += offsetX,
-        y: el.y += offsetY,
-      }
-    })
+  // const tolerance = 5;
+  // const polygon = simplify(Vertices.clockwiseSort(points), tolerance, true);
+  // const clockwise = 
+  // removeClosePoints(polygon, 10)
+  //   .map(el => {
+  //     return {
+  //       x: el.x += offsetX,
+  //       y: el.y += offsetY,
+  //     }
+  //   })
 
-  return clockwise;
+  // return clockwise;
+}
+
+export const removeCloseAndCollinear = (vertices: Vector[], tolerance = 5, minDistance = 10) => {
+  const simplified = simplify(Vertices.clockwiseSort(vertices), tolerance, true)
+  return removeClosePoints(simplified, minDistance)
 }
