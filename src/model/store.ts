@@ -1,26 +1,14 @@
-import { guard, sample } from "effector"
+import { sample } from "effector"
 import { domain } from "./domain"
-import { fillAutoLine, resetLineAction, setFileLoaded, setLineCoords, setShapeSettings, setToolChain, setZoom, showEmulation } from "./events"
-import { createPolygonFromImage, removeCloseAndCollinear } from "../utils/polygon-from-image"
+import { fillAutoLine, resetLineAction, setFileLoaded, setLineCoords, setPolygonFromImage, setShapeSettings, setToolChain, setZoom, showEmulation } from "./events"
 import { Vector } from "matter-js"
-
-export type ShapeSettings = {
-  xScale: number,
-  yScale: number,
-  xOffset: number,
-  yOffset: number
-}
-
-export const DEFAULT_SHAPE_SETTINGS: ShapeSettings = {
-  xScale: 1,
-  yScale: 1,
-  xOffset: 0.5,
-  yOffset: 0.5
-}
+import { ShapeSettings } from "../types"
+import { DEFAULT_SHAPE_SETTINGS } from "../data"
 
 export const $toolChain = domain.createStore<[string | null, string]>([null, 'line'])
 export const $loadedFile = domain.createStore<string | null>(null)
 export const $lineCoords = domain.createStore<Array<Vector>>([])
+export const $polygonFromImage = domain.createStore<Array<Vector>>([])
 export const $zoomValue = domain.createStore<number>(100)
 export const $emulationZone = domain.createStore<boolean>(false)
 export const $shapeSettings = domain.createStore<ShapeSettings>(DEFAULT_SHAPE_SETTINGS)
@@ -30,6 +18,7 @@ $loadedFile.on(setFileLoaded, (_, payload) => payload)
 
 $lineCoords.on(setLineCoords, (state, payload) => [...state, payload])
 $lineCoords.on(fillAutoLine, (_, payload) => payload)
+$polygonFromImage.on(fillAutoLine, (_, payload) => payload)
 
 $zoomValue.on(setZoom, (_, payload) => payload)
 $emulationZone.on(showEmulation, (_, payload) => payload)
@@ -40,41 +29,25 @@ $shapeSettings.on(setShapeSettings, (state, payload) => {
   }
 })
 
-const $polygonFromImage = $loadedFile.map((state) => {
-  if (!state) {
-    return []
-  }
+const storesToReset = [$zoomValue, $lineCoords, $toolChain]
 
-  const image = document.createElement('img')
-  console.log(image.width)
-  image.src = state
-  return createPolygonFromImage(image)
-})
-
-sample({
-  clock: resetLineAction,
-  source: $lineCoords,
-  fn: (store) => {
-    return store.slice(0, -1)
-  },
-  target: $lineCoords
-})
-
-sample({
-  clock: resetLineAction,
-  source: $lineCoords,
-  fn: (store) => {
-    return store.slice(0, -1)
-  },
-  target: $lineCoords
-})
-
-guard({
+const resetImage = sample({
   clock: setFileLoaded,
-  filter: (_, clock) => {
+  filter: (clock) => {
     return clock === null
   },
-  source: [],
+})
+
+storesToReset.forEach(store => {
+  store.reset(resetImage)
+})
+
+sample({
+  clock: resetLineAction,
+  source: $lineCoords,
+  fn: (store) => {
+    return store.slice(0, -1)
+  },
   target: $lineCoords
 })
 
@@ -83,11 +56,6 @@ sample({
   filter: (_, clock) => {
     return clock === 'auto-line'
   },
-  source: $polygonFromImage,
-  fn: (state) => {
-    return removeCloseAndCollinear(state)
-  },
+  source: setPolygonFromImage,
   target: fillAutoLine
 })
-
-$shapeSettings.watch(store => console.log(store))

@@ -3,11 +3,11 @@ import useImage from "use-image"
 import Konva from 'konva'
 import { createRef, useEffect, useState } from 'react'
 import { useStore } from 'effector-react'
-import { fillAutoLine, setLineCoords, setZoom } from '../../model/events'
+import { setLineCoords, setPolygonFromImage, setZoom } from '../../model/events'
 import { DrawingSpace } from '../drawing-space/drawing-space'
 import { $toolChain } from '../../model/store'
 import { useKeyShortcuts } from '../../utils/use-key-shortcuts'
-import { createPolygonFromImage } from '../../utils/polygon-from-image'
+import { createPolygonFromImage, removeCloseAndCollinear } from '../../utils/polygon-from-image'
 
 type ImageZoneProps = {
   imageSrc: string,
@@ -91,10 +91,8 @@ export const ImageZone = ({ imageSrc }: ImageZoneProps): JSX.Element => {
       return
     }
 
-    const canvas = layerRef?.current?.canvas._canvas as HTMLCanvasElement
-    // const points = createPolygonFromImage(image)
-    // console.log(points)
-    // fillAutoLine(points)
+    const points = createPolygonFromImage(image)
+    setPolygonFromImage(removeCloseAndCollinear(points))
   }, [image])
 
   return (

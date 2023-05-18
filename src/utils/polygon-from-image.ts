@@ -69,20 +69,6 @@ export const createPolygonFromImage = (image: HTMLImageElement): Vector[] => {
       y: el.y += offsetY,
     }
   })
-  
-  // Simplify the set of line segments into a polygon
-  // const tolerance = 5;
-  // const polygon = simplify(Vertices.clockwiseSort(points), tolerance, true);
-  // const clockwise = 
-  // removeClosePoints(polygon, 10)
-  //   .map(el => {
-  //     return {
-  //       x: el.x += offsetX,
-  //       y: el.y += offsetY,
-  //     }
-  //   })
-
-  // return clockwise;
 }
 
 export const removeCloseAndCollinear = (vertices: Vector[], tolerance = 5, minDistance = 10) => {

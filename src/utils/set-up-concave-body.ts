@@ -1,5 +1,5 @@
-import Matter, { Bodies, Common, Composite, Constraint } from "matter-js";
-import { ShapeSettings } from "../model/store";
+import Matter, { Bodies, Composite, Constraint } from "matter-js";
+import { ShapeSettings } from "../types";
 
 let vertices: Matter.Vector[]
 export const setUpConcaveBody = (concaveBody: Matter.Body, texture: string, shapeSettings: ShapeSettings): Matter.Composite => {

@@ -1,7 +1,8 @@
 import { Vector, Vertices } from "matter-js"
-import { DEFAULT_SHAPE_SETTINGS, ShapeSettings } from "../model/store"
 import prettier from 'prettier';
 import parserBabel from "prettier/parser-babel";
+import { ShapeSettings } from "../types";
+import { DEFAULT_SHAPE_SETTINGS } from "../data";
 
 const fixedVertices = (vertices: Vector[]) => {
   return vertices.map(el => {
