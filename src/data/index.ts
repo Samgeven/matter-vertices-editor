@@ -9,7 +9,8 @@ export const DEFAULT_SHAPE_SETTINGS: ShapeSettings = {
   xScale: 1,
   yScale: 1,
   xOffset: 0.5,
-  yOffset: 0.5
+  yOffset: 0.5,
+  constraints: 3
 }
 
 export const CONTROLS: Array<ControlConfig> = [
@@ -38,5 +39,12 @@ export const CONTROLS: Array<ControlConfig> = [
     max: 1,
     defaultValue: 0.5,
     step: 0.01
+  },
+  {
+    label: 'constraints',
+    min: 1,
+    max: 4,
+    defaultValue: 3,
+    step: 1
   },
 ]

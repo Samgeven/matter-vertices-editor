@@ -11,7 +11,7 @@ import { ShapeSettings } from "../../types"
 import { DEFAULT_SHAPE_SETTINGS } from "../../data"
 
 type MatterDemoProps = {
-  vertices: Array<{x: number, y: number}>
+  vertices: Vector[]
 }
 
 const verticesBodyRenderOptions = {
@@ -61,9 +61,10 @@ export const MatterDemo = ({ vertices }: MatterDemoProps) => {
     } else {
       Common.setDecomp(require('poly-decomp'))
       verticesBody = Bodies.fromVertices(e?.pageX ?? cw / 2, e?.pageY ?? ch / 2, [vertices], {
+        label: 'concave-body',
         render: { ...verticesBodyRenderOptions }
       })
-      console.log(verticesBody)
+
       bodyToRender = setUpConcaveBody(verticesBody, image, options)
     }
 

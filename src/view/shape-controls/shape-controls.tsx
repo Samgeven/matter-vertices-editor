@@ -1,57 +1,36 @@
 import { Button, Slider, Typography } from "@mui/material";
 import { Composite, World } from "matter-js";
 import { setShapeSettings } from "../../model/events";
-
-export type ControlConfig = {
-  label: 'xScale' | 'yScale' | 'xOffset' | 'yOffset',
-  min: number,
-  max: number,
-  defaultValue: number,
-  step?: number,
-}
-
-const CONTROLS: Array<ControlConfig> = [
-  {
-    label: 'xScale',
-    min: 0,
-    max: 2,
-    defaultValue: 1
-  },
-  {
-    label: 'yScale',
-    min: 0,
-    max: 2,
-    defaultValue: 1
-  },
-  {
-    label: 'xOffset',
-    min: 0,
-    max: 1,
-    defaultValue: 0.5,
-    step: 0.01
-  },
-  {
-    label: 'yOffset',
-    min: 0,
-    max: 1,
-    defaultValue: 0.5,
-    step: 0.01
-  },
-]
+import { ControlConfig } from "../../types";
+import { CONTROLS } from "../../data";
+import { replaceAllConstraints } from "../../utils/apply-constraints";
 
 const controlChangeHandler = (e: Event, world: World, controlProp: ControlConfig['label']) => {
   const allBodies = Composite.allBodies(world).filter(el => el.label === 'texture')
   const target = e.target as { value: number } | null
 
+  setShapeSettings({
+    [controlProp]: target?.value
+  })
+
+  if (controlProp === 'constraints') {
+    const allComposites = Composite.allComposites(world).filter(el => el.label === 'composite')
+
+    if (allComposites[0]?.constraints.length === target?.value) {
+      return
+    }
+
+    replaceAllConstraints(allComposites, target?.value ?? 2)
+    return
+  }
+
   for (const body of allBodies) {
     if (!body.render.sprite || !target) {
       return
     }
-    body.render.sprite[controlProp] = target?.value
+
+    body.render.sprite[controlProp] = target.value
   }
-  setShapeSettings({
-    [controlProp]: target?.value
-  })
 }
 
 const clearButtonHandler = (world: World) => {
