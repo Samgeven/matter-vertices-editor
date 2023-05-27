@@ -26,13 +26,12 @@ export const setUpConcaveBody = (concaveBody: Matter.Body, texture: string, shap
   })
 
   if (spriteBody.render.sprite) {
-    spriteBody.render.sprite.xOffset = shapeSettings.xOffset
-    spriteBody.render.sprite.yOffset = shapeSettings.yOffset
+    spriteBody.render.sprite = { ...spriteBody.render.sprite, ...shapeSettings }
   }
 
   const { constraints: count } = $shapeSettings.getState()
 
-  const constraints = createConstraints(concaveBody, spriteBody, count)
+  const constraints = createConstraints(concaveBody, spriteBody, count ?? 3)
   const composite = Composite.create({ label: 'composite' })
   Composite.add(composite, [concaveBody, spriteBody, ...constraints])
 

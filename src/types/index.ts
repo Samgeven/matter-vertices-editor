@@ -7,7 +7,7 @@ export type ShapeSettings = {
   yScale: number,
   xOffset: number,
   yOffset: number
-  constraints: number,
+  constraints?: number,
 }
 
 export type ControlConfig = {

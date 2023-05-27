@@ -1,0 +1,23 @@
+.code-block {
+  padding: 32px;
+  border-radius: 4px;
+  max-height: 400px;
+  overflow: auto;
+}
+
+.code-block::-webkit-scrollbar {
+  display: none;
+}
+
+.code-block::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+  border-radius: 4px;
+}
+
+.code-block::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+.code-block::-webkit-scrollbar-corner {
+  background-color: #f1f1f1;
+}

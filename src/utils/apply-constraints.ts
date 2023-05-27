@@ -1,7 +1,6 @@
 import Matter, { Bounds, Composite, Constraint, Vector } from "matter-js";
 
-export const defineConstraintPositions = (body: Matter.Body, count: number): Vector[] => {
-  const { vertices } = body 
+export const defineConstraintPositions = (vertices: Vector[], count: number): Vector[] => {
   const bounds = Bounds.create(vertices)
 
   const width = bounds.max.x - bounds.min.x
@@ -30,7 +29,8 @@ export const defineConstraintPositions = (body: Matter.Body, count: number): Vec
 }
 
 export const createConstraints = (body: Matter.Body, spriteBody: Matter.Body, count: number) => {
-  const positions = defineConstraintPositions(body, count)
+  const { vertices } = body
+  const positions = defineConstraintPositions(vertices, count)
   return positions.map((el,i) => {
     return Constraint.create({
       bodyA: body,

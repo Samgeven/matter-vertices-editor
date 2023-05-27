@@ -1,9 +1,10 @@
 import { Alert, Box, Typography } from "@mui/material"
-import { CopyBlock, dracula } from "react-code-blocks"
 import './export-block.css'
 import { $lineCoords } from "../../model/store"
 import { useStore } from "effector-react"
 import { Vertices } from "matter-js"
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { codepenEmbed } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 
 type ExportBlockProps = {
   exportCode: string | Array<any>
@@ -14,12 +15,20 @@ const boxStyle = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 600,
+  width: '100%',
+  maxWidth: '800px',
   bgcolor: '#282C34',
   border: '2px solid #FFEAA1',
   boxShadow: 24,
   p: 3,
   color: 'white',
+}
+
+const codeBlockStyle = {
+  padding: '24px',
+  borderRadius: '4px',
+  maxHeight: '400px',
+  overflow: 'auto'
 }
 
 export const ExportBlock = ({ exportCode }: ExportBlockProps): JSX.Element => {
@@ -36,12 +45,9 @@ export const ExportBlock = ({ exportCode }: ExportBlockProps): JSX.Element => {
           Your shape supposedly has concave vertices. Check out the emulation page to create additional shape settings.
         </Alert>
       : null}
-      <CopyBlock
-        style={{ padding: '16px !important' }}
-        text={exportCode}
-        language="javascript"
-        theme={dracula}
-      />
+      <SyntaxHighlighter language="javascript" style={codepenEmbed} customStyle={codeBlockStyle}>
+        {exportCode}
+      </SyntaxHighlighter>
     </Box>
   )
 }
