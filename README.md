@@ -10,7 +10,7 @@ Vertices editor allows for creating matter bodies from different shapes, and it 
 2. Creating a composite from concave shape and texture-holding shape.
 3. Using svg texture, which allows to create shape via Matter.Svg module
 
-The third approach won't fit if you intend to create something pixel-artish, for example, and first one implies replacing some source code of Matter. I choosed second approach for the editor, which seemed more flexible than others.
+The third approach won't fit if you intend to create something pixel-artish, for example, and first one implies replacing some source code of Matter. I chose second approach for the editor, which seemed more flexible than others.
 
 ## Usage
 
