@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/vertices-editor/static/css/main.090ad9ca.css",
-    "main.js": "/vertices-editor/static/js/main.3d4cae3b.js",
-    "index.html": "/vertices-editor/index.html",
-    "main.090ad9ca.css.map": "/vertices-editor/static/css/main.090ad9ca.css.map",
-    "main.3d4cae3b.js.map": "/vertices-editor/static/js/main.3d4cae3b.js.map"
+    "main.css": "/matter-vertices-editor/static/css/main.090ad9ca.css",
+    "main.js": "/matter-vertices-editor/static/js/main.16e64b1f.js",
+    "index.html": "/matter-vertices-editor/index.html",
+    "main.090ad9ca.css.map": "/matter-vertices-editor/static/css/main.090ad9ca.css.map",
+    "main.16e64b1f.js.map": "/matter-vertices-editor/static/js/main.16e64b1f.js.map"
   },
   "entrypoints": [
     "static/css/main.090ad9ca.css",
-    "static/js/main.3d4cae3b.js"
+    "static/js/main.16e64b1f.js"
   ]
 }
