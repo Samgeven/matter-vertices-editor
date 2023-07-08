@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/matter-vertices-editor/static/css/main.090ad9ca.css",
-    "main.js": "/matter-vertices-editor/static/js/main.16e64b1f.js",
+    "main.css": "/matter-vertices-editor/static/css/main.d4a1187c.css",
+    "main.js": "/matter-vertices-editor/static/js/main.28015224.js",
     "index.html": "/matter-vertices-editor/index.html",
-    "main.090ad9ca.css.map": "/matter-vertices-editor/static/css/main.090ad9ca.css.map",
-    "main.16e64b1f.js.map": "/matter-vertices-editor/static/js/main.16e64b1f.js.map"
+    "main.d4a1187c.css.map": "/matter-vertices-editor/static/css/main.d4a1187c.css.map",
+    "main.28015224.js.map": "/matter-vertices-editor/static/js/main.28015224.js.map"
   },
   "entrypoints": [
-    "static/css/main.090ad9ca.css",
-    "static/js/main.16e64b1f.js"
+    "static/css/main.d4a1187c.css",
+    "static/js/main.28015224.js"
   ]
 }
