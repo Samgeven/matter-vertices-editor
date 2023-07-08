@@ -1,7 +1,7 @@
 import './utility-btn.css'
 
 type UtilityBtnProps = {
-  onClick: () => void,
+  onClick?: () => void,
   alias: string,
 }
 

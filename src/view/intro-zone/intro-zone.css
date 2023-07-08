@@ -16,3 +16,10 @@
 .drop-zone path {
   fill: #FFEAA1;
 }
+
+.intro-repo {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+}
