@@ -1,9 +1,5 @@
+import { UtilityBtnProps } from './types'
 import './utility-btn.css'
-
-type UtilityBtnProps = {
-  onClick?: () => void,
-  alias: string,
-}
 
 export const UtilityBtn = ({ onClick, alias }: UtilityBtnProps): JSX.Element => {
   return (

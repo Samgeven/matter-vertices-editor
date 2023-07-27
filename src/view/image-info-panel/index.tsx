@@ -1,9 +1,5 @@
 import './image-info-panel.css'
-
-type ImageInfoPanelProps = {
-  zoom: number,
-  imageSize: string,
-}
+import { ImageInfoPanelProps } from './types'
 
 export const ImageInfoPanel = ({ zoom, imageSize }: ImageInfoPanelProps): JSX.Element => {
   return (

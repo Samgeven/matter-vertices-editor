@@ -4,20 +4,11 @@ import Konva from 'konva'
 import { createRef, useEffect, useState } from 'react'
 import { useStore } from 'effector-react'
 import { setLineCoords, setPolygonFromImage, setZoom } from '../../model/events'
-import { DrawingSpace } from '../drawing-space/drawing-space'
+import { DrawingSpace } from '../drawing-space'
 import { $toolChain } from '../../model/store'
 import { useKeyShortcuts } from '../../utils/use-key-shortcuts'
 import { createPolygonFromImage, removeCloseAndCollinear } from '../../utils/polygon-from-image'
-
-type ImageZoneProps = {
-  imageSrc: string,
-}
-
-type scaleOptions = {
-  stageScale?: number,
-  stageX?: number,
-  stageY?: number
-}
+import { ImageZoneProps, scaleOptions } from './types'
 
 const lineLeftBtnHandler = (stage: Konva.Stage) => {
   const [pointerX, pointerY] = [stage.getRelativePointerPosition()?.x, stage.getRelativePointerPosition()?.y]
