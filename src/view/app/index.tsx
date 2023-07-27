@@ -1,11 +1,11 @@
 
 import './App.css';
-import { ImageZone } from '../image-zone/image-zone';
-import { IntroZone } from '../intro-zone/intro-zone';
+import { ImageZone } from '../image-zone/';
+import { IntroZone } from '../intro-zone/';
 import { $emulationZone, $lineCoords, $loadedFile } from '../../model/store';
 import { useStore } from 'effector-react';
-import { UILayer } from '../ui-layer/ui-layer';
-import { MatterDemo } from '../matter-demo/matter-demo';
+import { UILayer } from '../ui-layer';
+import { MatterDemo } from '../matter-demo/';
 import { useCallback } from 'react';
 
 function App() {

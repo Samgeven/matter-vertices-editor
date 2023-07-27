@@ -3,10 +3,10 @@ import { Bodies, Common, Engine, Render, Runner, Vector, Vertices, World } from 
 import { $loadedFile, $shapeSettings } from "../../model/store"
 import { useStore } from "effector-react"
 import { setUpConcaveBody } from "../../utils/set-up-concave-body"
-import { UtilityBtn } from "../utility-btn/utility-btn"
+import { UtilityBtn } from "../utility-btn"
 import { showEmulation } from "../../model/events"
 import './index.css'
-import { ShapeControls } from "../shape-controls/shape-controls"
+import { ShapeControls } from "../shape-controls"
 import { ShapeSettings } from "../../types"
 import { DEFAULT_SHAPE_SETTINGS } from "../../data"
 

@@ -5,12 +5,8 @@ import PolylineIcon from '@mui/icons-material/Polyline';
 import PanToolIcon from '@mui/icons-material/PanTool';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import './tool-icon.css'
-import { EditingTools } from '../../types';
 import { Tooltip } from '@mui/material';
-
-type ToolIconProps = {
-  alias: EditingTools,
-}
+import { ToolIconProps } from './types';
 
 const ALIAS_TO_ICON_MAP = {
   'line': <PolylineIcon htmlColor='white'/>,

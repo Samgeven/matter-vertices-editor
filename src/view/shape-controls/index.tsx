@@ -4,6 +4,7 @@ import { setShapeSettings } from "../../model/events";
 import { ControlConfig } from "../../types";
 import { CONTROLS } from "../../data";
 import { replaceAllConstraints } from "../../utils/apply-constraints";
+import { ShapeControlsProps } from "./types";
 
 const controlChangeHandler = (e: Event, world: World, controlProp: ControlConfig['label']) => {
   const allBodies = Composite.allBodies(world).filter(el => el.label === 'texture')
@@ -35,11 +36,6 @@ const controlChangeHandler = (e: Event, world: World, controlProp: ControlConfig
 
 const clearButtonHandler = (world: World) => {
   Composite.clear(world, true)
-}
-
-type ShapeControlsProps = {
-  world: World,
-  isShapeConvex?: boolean
 }
 
 export const ShapeControls = ({ world, isShapeConvex = true }: ShapeControlsProps): JSX.Element => {
