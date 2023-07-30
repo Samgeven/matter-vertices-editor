@@ -1,5 +1,5 @@
 
-import './App.css';
+import './index.css';
 import { ImageZone } from '../image-zone/';
 import { IntroZone } from '../intro-zone/';
 import { $emulationZone, $lineCoords, $loadedFile } from '../../model/store';

@@ -1,5 +1,5 @@
 import { ToolIcon } from '../tool-icon'
-import './tool-panel.css'
+import './index.css'
 
 export const ToolPanel = (): JSX.Element => {
 

@@ -1,5 +1,5 @@
 import { UtilityBtnProps } from './types'
-import './utility-btn.css'
+import './index.css'
 
 export const UtilityBtn = ({ onClick, alias }: UtilityBtnProps): JSX.Element => {
   return (
