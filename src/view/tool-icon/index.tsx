@@ -4,7 +4,7 @@ import { setToolChain } from '../../model/events'
 import PolylineIcon from '@mui/icons-material/Polyline';
 import PanToolIcon from '@mui/icons-material/PanTool';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
-import './tool-icon.css'
+import './index.css'
 import { Tooltip } from '@mui/material';
 import { ToolIconProps } from './types';
 

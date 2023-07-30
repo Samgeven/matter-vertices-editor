@@ -1,4 +1,4 @@
-import './image-info-panel.css'
+import './index.css'
 import { ImageInfoPanelProps } from './types'
 
 export const ImageInfoPanel = ({ zoom, imageSize }: ImageInfoPanelProps): JSX.Element => {

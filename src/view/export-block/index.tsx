@@ -1,5 +1,5 @@
 import { Alert, Box, Typography } from "@mui/material"
-import './export-block.css'
+import './index.css'
 import { $lineCoords } from "../../model/store"
 import { useStore } from "effector-react"
 import { Vertices } from "matter-js"

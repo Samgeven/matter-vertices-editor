@@ -2,7 +2,7 @@ import { useState } from "react"
 import { FileUploader } from "react-drag-drop-files"
 import { setFileLoaded } from "../../model/events"
 import { base64FromFile } from "../../utils/base64-from-file"
-import './intro-zone.css'
+import './index.css'
 import GitHubIcon from '@mui/icons-material/GitHub';
 
 export const IntroZone = (): JSX.Element => {
