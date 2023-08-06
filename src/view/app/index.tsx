@@ -1,12 +1,11 @@
-
-import './index.css';
-import { ImageZone } from '../image-zone/';
-import { IntroZone } from '../intro-zone/';
-import { $emulationZone, $lineCoords, $loadedFile } from '../../model/store';
-import { useStore } from 'effector-react';
-import { UILayer } from '../ui-layer';
-import { MatterDemo } from '../matter-demo/';
-import { useCallback } from 'react';
+import './index.css'
+import { ImageZone } from '../image-zone/'
+import { IntroZone } from '../intro-zone/'
+import { $emulationZone, $lineCoords, $loadedFile } from '../../model/store'
+import { useStore } from 'effector-react'
+import { UILayer } from '../ui-layer'
+import { MatterDemo } from '../matter-demo/'
+import { useCallback } from 'react'
 
 function App() {
   const loadedFile = useStore($loadedFile)
@@ -31,10 +30,10 @@ function App() {
   }, [loadedFile, showEmulation])
 
   return (
-    <div className="App">
+    <div className='App'>
       <AppState />
     </div>
   )
 }
 
-export default App;
+export default App

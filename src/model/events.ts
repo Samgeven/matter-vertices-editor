@@ -1,7 +1,7 @@
-import { Vector } from "matter-js"
-import { EditingTools } from "../types"
-import { domain } from "./domain"
-import { ShapeSettings } from "../types/index"
+import { Vector } from 'matter-js'
+import { EditingTools } from '../types'
+import { domain } from './domain'
+import { ShapeSettings } from '../types/index'
 
 export const setFileLoaded = domain.createEvent<string | null>('file is loaded/unloaded')
 

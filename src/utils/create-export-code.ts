@@ -1,16 +1,16 @@
-import { Vector, Vertices } from "matter-js"
-import prettier from 'prettier';
-import parserBabel from "prettier/parser-babel";
-import { ShapeSettings } from "../types";
-import { DEFAULT_SHAPE_SETTINGS } from "../data";
-import { defineConstraintPositions } from "./apply-constraints";
-import { $shapeSettings } from "../model/store";
+import { Vector, Vertices } from 'matter-js'
+import prettier from 'prettier'
+import parserBabel from 'prettier/parser-babel'
+import { ShapeSettings } from '../types'
+import { DEFAULT_SHAPE_SETTINGS } from '../data'
+import { defineConstraintPositions } from './apply-constraints'
+import { $shapeSettings } from '../model/store'
 
 const renderArrayConst = (arr: Array<any>, varName: string) => {
-  const fixed =  arr.map(el => {
+  const fixed = arr.map((el) => {
     return {
       x: Number(el.x.toFixed(4)),
-      y: Number(el.x.toFixed(4))
+      y: Number(el.x.toFixed(4)),
     }
   })
 
@@ -18,9 +18,9 @@ const renderArrayConst = (arr: Array<any>, varName: string) => {
 }
 
 const PRETTIER_CONFIG: prettier.Options = {
-  parser: 'babel', 
+  parser: 'babel',
   plugins: [parserBabel],
-  embeddedLanguageFormatting: "off",
+  embeddedLanguageFormatting: 'off',
 }
 
 const excludeDefaultShapeSettings = (shapeSettings: ShapeSettings): Partial<ShapeSettings> => {
@@ -106,7 +106,19 @@ export const createExportCode = (vertices: Vector[], shapeSettings: ShapeSetting
   const concaveImports = `import { Engine, Render, Runner, Common, Bodies, Constraint, Composite, World } from 'matter-js'`
 
   const convexExportString = [convexImports, engineStart, verticesString, plainSpriteBody, spriteAdding].join(';\n\n')
-  const concaveExportString = [concaveImports, engineStart, verticesString, shapeSettingsString, decomp, concavebody, compoundSpriteBody, applyShapeSettings, positions, constraintsSettings, compositeAdding].join(';\n\n')
+  const concaveExportString = [
+    concaveImports,
+    engineStart,
+    verticesString,
+    shapeSettingsString,
+    decomp,
+    concavebody,
+    compoundSpriteBody,
+    applyShapeSettings,
+    positions,
+    constraintsSettings,
+    compositeAdding,
+  ].join(';\n\n')
 
   return prettier.format(Vertices.isConvex(vertices) ? convexExportString : concaveExportString, PRETTIER_CONFIG)
 }
