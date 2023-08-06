@@ -1,6 +1,7 @@
 # Matter vertices editor
 
 Simple visual tool for creating matter-js bodies from image
+
 ![editor-example](https://github.com/Samgeven/matter-vertices-editor/assets/53538618/e90f098e-0a5e-4412-86ff-76d9a2f56d2b)
 
 ## About the tool
