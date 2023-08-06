@@ -1,9 +1,19 @@
-import { sample } from "effector"
-import { domain } from "./domain"
-import { fillAutoLine, resetLineAction, setFileLoaded, setLineCoords, setPolygonFromImage, setShapeSettings, setToolChain, setZoom, showEmulation } from "./events"
-import { Vector } from "matter-js"
-import { ShapeSettings } from "../types"
-import { DEFAULT_SHAPE_SETTINGS } from "../data"
+import { sample } from 'effector'
+import { domain } from './domain'
+import {
+  fillAutoLine,
+  resetLineAction,
+  setFileLoaded,
+  setLineCoords,
+  setPolygonFromImage,
+  setShapeSettings,
+  setToolChain,
+  setZoom,
+  showEmulation,
+} from './events'
+import { Vector } from 'matter-js'
+import { ShapeSettings } from '../types'
+import { DEFAULT_SHAPE_SETTINGS } from '../data'
 
 export const $toolChain = domain.createStore<[string | null, string]>([null, 'line'])
 export const $loadedFile = domain.createStore<string | null>(null)
@@ -25,7 +35,7 @@ $emulationZone.on(showEmulation, (_, payload) => payload)
 $shapeSettings.on(setShapeSettings, (state, payload) => {
   return {
     ...state,
-    ...payload
+    ...payload,
   }
 })
 
@@ -38,7 +48,7 @@ const resetImage = sample({
   },
 })
 
-storesToReset.forEach(store => {
+storesToReset.forEach((store) => {
   store.reset(resetImage)
 })
 
@@ -48,7 +58,7 @@ sample({
   fn: (store) => {
     return store.slice(0, -1)
   },
-  target: $lineCoords
+  target: $lineCoords,
 })
 
 sample({
@@ -57,5 +67,5 @@ sample({
     return clock === 'auto-line'
   },
   source: setPolygonFromImage,
-  target: fillAutoLine
+  target: fillAutoLine,
 })
